@@ -33,5 +33,6 @@ class Fibonacci
     }
 }
 
-$result = (new Fibonacci())->run(30, 'r');
-print("fib(10) => $result\n");
+$n = 30;
+$result = (new Fibonacci())->run($n, 'd');
+print("fib($n) => $result\n");
