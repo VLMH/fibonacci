@@ -18,6 +18,8 @@ class Fibonacci
     end
 
     def fib_dynamic(n)
+        return n if n < 2
+
         values = [0, 1]
         (2..n).each do |i|
             values[i] = values[i - 1] + values[i - 2]

@@ -25,6 +25,8 @@ class Fibonacci
 
     private function fib_dynamic($n)
     {
+        if ($n < 2) return $n;
+
         $values = [0, 1];
 
         for ($i = 2; $i <= $n; $i++) {
