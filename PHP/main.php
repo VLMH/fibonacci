@@ -2,7 +2,7 @@
 
 <?php
 
-require "PHP/Fibonacci.php";
+require __DIR__ . "/Fibonacci.php";
 
 $n = 10;        // default fib(10)
 $method = 'd';  // default use dynamic method
