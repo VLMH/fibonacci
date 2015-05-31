@@ -1,7 +1,3 @@
-#! /usr/bin/env python
-
-import sys
-
 class Fibonacci:
     def fib(self, n, method):
         if method == 'recursion' or method == 'r':
@@ -24,18 +20,3 @@ class Fibonacci:
             values.append(values[i - 1] + values[i - 2])
 
         return values.pop()
-
-# default value
-n = 10
-method = 'd'
-
-i = 1
-while i < len(sys.argv):
-    if sys.argv[i] == '--method' or sys.argv[i] == '-m':
-        i += 1
-        method = sys.argv[i]
-    else:
-        n = int(sys.argv[i])
-    i += 1
-
-print "fib(%d) => %d" % (n, Fibonacci().fib(n, method))
