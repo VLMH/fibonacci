@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "express": "4.12.x",
-    "ws": "0.7.x"
+    "ws": "0.7.x",
+    "body-parser": "1.12.x"
   },
   "author": "VLMH"
 }
