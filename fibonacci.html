@@ -2,21 +2,66 @@
 <html>
 <head>
     <title>Fibonacci</title>
+
+    <style type="text/css">
+        body {
+            font-family: Sans-serif;
+            font-size: 15px;
+        }
+        h1 {
+            font-size: 25px;
+        }
+        table {
+            border-collapse: collapse;
+            border: 0;
+            padding: 0;
+            margin: 0;
+        }
+        table th {
+            font-weight: bold;
+            text-align: center;
+        }
+        table th, table td {
+            padding: 5px;
+            border: 1px solid #333;
+            min-width: 200px;
+        }
+        form {
+            padding: 10px;
+        }
+        div {
+            padding: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
+    <h1>Fibonacci in various progamming langauges</h1>
     <form>
-        Number: <input type="number" name="number" id="number" value="10">
-        <br>
-        Method:
-        <select name="method" id="method">
-            <option value="r">Recursion</option>
-            <option value="d">Dynamic</option>
-        </select>
-        <br>
-        <button type="button" onclick="javascript:calFib()">submit</button>
+        <div>
+            Number: <input type="number" name="number" id="number" value="10">
+        </div>
+        <div>
+            Method:
+            <select name="method" id="method">
+                <option value="r">Recursion</option>
+                <option value="d">Dynamic</option>
+            </select>
+        </div>
+        <div>
+            <button type="button" onclick="javascript:calFib()">submit</button>
+        </div>
     </form>
 
-    <ul id="print"></ul>
+    <table id="print">
+        <tr>
+            <th>Language</th>
+            <th>Output</th>
+            <th>Time Spent (ms)</th>
+        </tr>
+    </table>
 </body>
 
 <script type="text/javascript">
@@ -32,8 +77,6 @@
             method: method,
         };
 
-        // console.log(JSON.stringify(params));
-
         ws.send(JSON.stringify(params));
     }
 
@@ -42,11 +85,21 @@
     };
 
     ws.onmessage = function(event) {
+        var data = JSON.parse(event.data);
         console.log(event.data);
-        // var ul = document.querySelector('#print');
-        // var li = document.createElement('li');
-        // li.innerHTML = JSON.parse(event.data);
-        // ul.innerHTML = li.outerHTML + ul.innerHTML;
+
+        var elTable = document.querySelector('#print');
+        var elRow = document.createElement('tr');
+        var elLang = document.createElement('td');
+        var elOutput = document.createElement('td');
+        var elTime = document.createElement('td');
+
+        elLang.innerHTML = data.language;
+        elOutput.innerHTML = data.result;
+        elTime.innerHTML = data.time_spent;
+
+        elRow.innerHTML = elLang.outerHTML + elOutput.outerHTML + elTime.outerHTML;
+        elTable.innerHTML += elRow.outerHTML;
     };
 </script>
 
