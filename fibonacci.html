@@ -55,7 +55,7 @@
         </div>
     </form>
 
-    <table id="print">
+    <table id="print" class="hidden">
         <tr>
             <th>Language</th>
             <th>Output</th>
@@ -86,7 +86,6 @@
 
     ws.onmessage = function(event) {
         var data = JSON.parse(event.data);
-        console.log(event.data);
 
         var elTable = document.querySelector('#print');
         var elRow = document.createElement('tr');
@@ -100,6 +99,7 @@
 
         elRow.innerHTML = elLang.outerHTML + elOutput.outerHTML + elTime.outerHTML;
         elTable.innerHTML += elRow.outerHTML;
+        elTable.classList.remove('hidden');
     };
 </script>
 
