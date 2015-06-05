@@ -6,6 +6,28 @@ var port = 5000
 var exec = require('child_process').exec
 var bodyParser = require('body-parser')
 
+function execInSequence(commands, ws) {
+    var languages = Object.keys(commands)
+    if (languages.length === 0) {
+        return
+    }
+
+    var lang = languages.shift()
+    var start = Date.now()
+    exec(commands[lang], function(err, stdout, stderr) {
+        var output = {
+            language: lang,
+            result: stdout.trim(),
+            time_spent: Date.now() - start,
+        }
+        ws.send(JSON.stringify(output), function() {})
+        console.log(output)
+
+        delete commands[lang]
+        execInSequence(commands, ws)
+    })
+}
+
 app.use(bodyParser.urlencoded({extended: true}))
 
 app.get('/', function(req, res) {
@@ -43,10 +65,6 @@ var wss = new WebSocketServer({server: server})
 console.log("websocket server connected")
 
 wss.on("connection", function(ws) {
-    // var id = setInterval(function() {
-    //     ws.send(JSON.stringify(new Date()), function() {})
-    // }, 1000)
-
     console.log("websocket connection open")
 
     ws.on("open", function open() {
@@ -57,20 +75,16 @@ wss.on("connection", function(ws) {
         console.log(data, flags)
 
         var params = JSON.parse(data)
-        var cmd = 'ruby ' + __dirname + '/Ruby/main.rb -m ' + params.method + ' ' + params.number.toString(10)
-        var start = Date.now()
+        var commands = {
+            ruby: 'ruby ' + __dirname + '/Ruby/main.rb -m ' + params.method + ' ' + params.number.toString(10),
+            php: 'php ' + __dirname + '/PHP/main.php -m ' + params.method + ' ' + params.number.toString(10),
+            python: 'python ' + __dirname + '/Python/main.py -m ' + params.method + ' ' + params.number.toString(10),
+        }
 
-        exec(cmd, function(err, stdout, stderr) {
-            var output = {
-                result: stdout.trim(),
-                time_spent: Date.now() - start,
-            }
-            ws.send(JSON.stringify(output), function() {})
-        })
+        execInSequence(commands, ws)
     })
 
     ws.on("close", function() {
         console.log("websocket connection close")
-        // clearInterval(id)
     })
 })
