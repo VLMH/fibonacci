@@ -120,41 +120,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   #   chef.validation_client_name = "ORGNAME-validator"
 
-  $script = <<SCRIPT
-echo '=== Start provisioning'
-
-echo '> update and install system packages'
-yum -y update
-yum install -y git
-
-echo '> set locale'
-echo 'export LC_ALL="en_US.UTF-8"' >> ~/.bash_profile
-echo 'export LC_CTYPE="en_US.UTF-8"' >> ~/.bash_profile
-
-echo '> install php'
-rpm -Uvh https://mirror.webtatic.com/yum/el7/epel-release.rpm
-rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-yum install -y php56w
-
-echo '> install ruby via rvm'
-gpg2 --keyserver hkp://pgp.mit.edu --recv-keys D39DC0E3
-curl -L https://get.rvm.io | bash -s stable
-source /etc/profile.d/rvm.sh
-rvm install 2.2.2
-
-echo '> install python via pyenv'
-curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
-echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bash_profile
-echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
-source ~/.bash_profile
-pyenv install 2.7.10
-pyenv global 2.7.10
-
-echo '> install nodejs via nvm'
-wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.25.4/install.sh | bash
-source /root/.bashrc
-nvm install 0.12.4
-nvm use 0.12.4 && nvm alias default v0.12.4
-SCRIPT
-  config.vm.provision "shell", inline: $script
+  config.vm.provision "shell", path: 'vagrant/provision.sh'
 end
